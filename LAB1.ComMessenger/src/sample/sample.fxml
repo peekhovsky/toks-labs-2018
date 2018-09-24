@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" snapToPixel="false" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <SplitPane prefHeight="400.0" prefWidth="250.0" snapToPixel="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" snapToPixel="false" SplitPane.resizableWithParent="false">
+               <children>
+                  <ChoiceBox fx:id="speedChoiceBox" layoutX="11.0" layoutY="23.0" prefHeight="26.0" prefWidth="225.0" snapToPixel="false" AnchorPane.bottomAnchor="350.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="25.0" />
+                  <Label layoutX="11.0" layoutY="5.0" prefHeight="18.0" prefWidth="226.0" snapToPixel="false" text="SPEED" AnchorPane.bottomAnchor="375.0" AnchorPane.topAnchor="5.0" />
+                  <TextArea fx:id="terminalTextArea" editable="false" layoutX="11.0" layoutY="149.0" prefHeight="165.0" prefWidth="226.0" snapToPixel="false" wrapText="true" AnchorPane.bottomAnchor="85.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="150.0">
+                     <font>
+                        <Font name="Courier New" size="12.0" />
+                     </font></TextArea>
+                  <Button fx:id="connectButton" layoutX="15.0" layoutY="324.0" mnemonicParsing="false" onAction="#pressedConnectButton" prefHeight="26.0" prefWidth="218.0" snapToPixel="false" text="CONNECT" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="325.0" />
+                  <Button fx:id="stopButton" layoutX="15.0" layoutY="357.0" mnemonicParsing="false" onAction="#pressedStopButton" prefHeight="26.0" prefWidth="218.0" snapToPixel="false" text="STOP" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="360.0" />
+                  <Label fx:id="statusLabel" layoutX="11.0" layoutY="124.0" prefHeight="18.0" prefWidth="226.0" snapToPixel="false" text="*status*" AnchorPane.bottomAnchor="260.0" AnchorPane.topAnchor="125.0" />
+                  <ChoiceBox fx:id="portChoiceBox" layoutX="10.0" layoutY="77.0" prefHeight="26.0" prefWidth="226.0" snapToPixel="false" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="75.0" />
+                  <Label layoutX="11.0" layoutY="59.0" prefHeight="18.0" prefWidth="226.0" snapToPixel="false" text="PORT" AnchorPane.bottomAnchor="330.0" AnchorPane.topAnchor="55.0" />
+               </children>
+            </AnchorPane>
+         </items>
+      </SplitPane>
+      <TextArea fx:id="messengerTextArea" editable="false" layoutX="250.0" prefHeight="348.0" prefWidth="350.0" snapToPixel="false" wrapText="true" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Button fx:id="sendButton" layoutX="502.0" layoutY="357.0" mnemonicParsing="false" onAction="#pressedSendButton" prefHeight="38.0" prefWidth="98.0" snapToPixel="false" text="SEND" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="360.0" />
+      <TextArea fx:id="messengerTextField" layoutX="250.0" layoutY="357.0" prefHeight="18.0" prefWidth="250.0" snapToPixel="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="360.0" />
+   </children>
+   <cursor>
+      <Cursor fx:constant="DEFAULT" />
+   </cursor>
+</AnchorPane>
