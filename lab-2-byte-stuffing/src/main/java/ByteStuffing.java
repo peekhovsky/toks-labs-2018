@@ -6,13 +6,13 @@ import java.util.Arrays;
 public class ByteStuffing {
 
     //first and last bytes are
-    private final static byte F_END_SYMBOL = 0x7E; //126 ~
-    private final static byte F_ESC_SYMBOL = 0x7D; //125 }
-    private final static byte T_END_SYMBOL = 0x5E; //94
-    private final static byte T_ESC_SYMBOL = 0x5D; //93
+    public final static byte F_END_SYMBOL = 0x7E; //126 ~
+    public final static byte F_ESC_SYMBOL = 0x7D; //125 }
+    public final static byte T_END_SYMBOL = 0x5E; //94
+    public final static byte T_ESC_SYMBOL = 0x5D; //93
 
 
-    public static byte[] makeStuffing(byte[] bytes) {
+    public static byte[] doStuffing(byte[] bytes) {
 
         ArrayList<Byte> list = new ArrayList<>
                 (Arrays.asList
@@ -61,9 +61,5 @@ public class ByteStuffing {
         Byte[] returnBytes = new Byte[list.size()];
         list.toArray(returnBytes);
         return ArrayUtils.toPrimitive(returnBytes);
-    }
-
-    public static void main(String[] args) {
-
     }
 }

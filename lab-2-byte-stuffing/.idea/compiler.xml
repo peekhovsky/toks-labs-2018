@@ -9,5 +9,8 @@
         <module name="lab-2-byte-stuffing" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="lab-2-byte-stuffing" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

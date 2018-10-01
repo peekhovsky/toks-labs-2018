@@ -172,7 +172,7 @@ class MessengerCore {
         Runnable r = () -> {
             try {
                 serialPort.writeBytes(
-                        ByteStuffing.makeStuffing(
+                        ByteStuffing.doStuffing(
                                 (s + "$end$").getBytes()));
 
             } catch (SerialPortException e) {
