@@ -7,19 +7,19 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import static javax.print.attribute.standard.MediaSizeName.C;
 
 public class Main extends Application {
 
-    private Controller controller;
 
     @Override
     public void start(Stage stage) throws Exception {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("sample.fxml"));
-        AnchorPane anchorPane = fxmlLoader.load();
+        Pane anchorPane = fxmlLoader.load();
         controller = fxmlLoader.getController();
         Scene scene = new Scene(anchorPane);
         stage.setScene(scene);

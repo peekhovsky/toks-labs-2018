@@ -8,6 +8,7 @@ public class MessengerCore {
 
     private SerialPort serialPort;
     private boolean isPortOpened = false;
+    private StringBuffer message = new StringBuffer();
 
     final static String[] speeds = { "110", "300", "600", "1200", "4800",
             "9600", "14400","19200", "38400", "57600",  "115200", "128000", "256000" };
@@ -21,7 +22,6 @@ public class MessengerCore {
             Main.print("Port is already opened!");
             return true;
         }
-
         serialPort = new SerialPort(portName);
 
         try {
@@ -69,14 +69,14 @@ public class MessengerCore {
                     serialPort.setParams(SerialPort.BAUDRATE_9600,
                             SerialPort.DATABITS_8,
                             SerialPort.STOPBITS_1,
-                            SerialPort.PARITY_NONE);
+                            SerialPort.PARITY_EVEN);
                     break;
                 case "14400":
                     serialPort.openPort();
                     serialPort.setParams(SerialPort.BAUDRATE_14400,
                             SerialPort.DATABITS_8,
                             SerialPort.STOPBITS_1,
-                            SerialPort.PARITY_NONE);
+                            SerialPort.PARITY_EVEN);
                     break;
                 case "19200":
                     serialPort.openPort();
@@ -147,39 +147,63 @@ public class MessengerCore {
         return true;
     }
 
-    void stop() {
+    boolean stop() {
         if (!isPortOpened) {
             Main.print("Port is already closed!");
-            return;
+            return true;
         }
 
         try {
             Main.print("Trying to close port " + serialPort.getPortName() + "...");
             serialPort.closePort();
             Main.print("Port has been closed.");
-
             isPortOpened = false;
+            return true;
 
         } catch (SerialPortException e) {
             e.printStackTrace();
             Main.print("Cannot close port!");
+            return false;
         }
     }
 
-    void sendMessage(String s) {
+    boolean sendMessage(String s) {
+        Runnable r = () -> {
+            try {
+                serialPort.writeString(s);
+                serialPort.writeString("$end$");
+            } catch (SerialPortException e) {
+                e.printStackTrace();
+                Main.print("Cannot send message: " + e.getExceptionType());
+            }
+        };
+        Thread thd = new Thread(r);
+        thd.start();
         try {
-            serialPort.writeString(s);
-        } catch (SerialPortException e) {
-            Main.print("Cannot send message: " + e.getExceptionType());
+            thd.join(2000);
+            if (!thd.isAlive()) {
+                Main.print("Message has been sent.");
+            } else {
+                Main.print("Error: cannot connect to other device!");
+                thd.interrupt();
+                return false;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
         }
+        return true;
     }
+
+
 
     private class PortReader implements SerialPortEventListener {
+        @Override
         public void serialEvent(SerialPortEvent event) {
-            if(event.isRXCHAR() && event.getEventValue() > 0){
+            if (event.isRXCHAR() && event.getEventValue() > 0) {
                 try {
-                    String data = serialPort.readString(event.getEventValue());
-                    Main.print("Message: "data);
+                    String s = serialPort.readString(event.getEventValue());
+                    messageCreator(s);
                 }
                 catch (SerialPortException e) {
                     e.printStackTrace();
@@ -187,5 +211,14 @@ public class MessengerCore {
                 }
             }
         }
+    }
+
+    private void messageCreator(String s) {
+        message.append(s);
+        if (message.substring(message.length() - 5, message.length()).equals("$end$")) {
+            Main.print("Message: " +message.substring(0,message.length() - 5));
+            message = new StringBuffer();
+        }
+
     }
 }

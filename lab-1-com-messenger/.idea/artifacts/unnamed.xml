@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="unnamed">
+    <output-path>$PROJECT_DIR$/out/artifacts/unnamed</output-path>
+    <properties id="ant-postprocessing">
+      <options enabled="true" />
+    </properties>
+    <root id="archive" name="unnamed.jar">
+      <element id="library" level="project" name="Maven: org.scream3r:jssc:2.8.0" />
+      <element id="module-output" name="lab-1-com-messenger" />
+    </root>
+  </artifact>
+</component>
