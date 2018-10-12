@@ -172,13 +172,7 @@ class MessengerCore {
     void sendMessage(String s) {
         Runnable r = () -> {
             try {
-                serialPort.writeString(
-                        HammingCode.getHammingCodeFromBytes(
-                            ByteStuffing.doStuffing(
-                                    (s + "$end$").getBytes()
-                            )
-                        )
-                );
+                serialPort.writeString(HammingCode.getHammingCodeFromBytes(ByteStuffing.doStuffing((s).getBytes())));
 
             } catch (SerialPortException e) {
                 e.printStackTrace();
@@ -207,13 +201,7 @@ class MessengerCore {
         public void serialEvent(SerialPortEvent event) {
             if (event.isRXCHAR() && event.getEventValue() > 0) {
                 try {
-                    String s = new String(
-                            ByteStuffing.inject(
-                                    HammingCode.getBytesFromHammingCode(
-                                            serialPort.readString(event.getEventValue())
-                                    )
-                            )
-                    );
+                    String s = new String(ByteStuffing.inject(HammingCode.getBytesFromHammingCode(serialPort.readString(event.getEventValue()))));
 
                     messageCreator(s);
                 }
@@ -227,11 +215,11 @@ class MessengerCore {
 
     private void messageCreator(String s) {
         message.append(s);
-        if (s.length() >= 5) {
-            if (message.substring(message.length() - 5, message.length()).equals("$end$")) {
+        //if (s.length() >= 5) {
+         //   if (message.substring(message.length() - 5, message.length()).equals("$end$")) {
                 Main.print("Message: " + message.substring(0, message.length() - 5));
-                message = new StringBuffer();
-            }
-        }
+               message = new StringBuffer();
+        //    }
+        //}
     }
 }

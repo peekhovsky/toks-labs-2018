@@ -10,17 +10,37 @@ public class HammingCode {
 
     public static String getHammingCodeFromBytes(byte[] bytes) {
 
+        StringBuilder returnString = new StringBuilder();
 
+        for (int i = 0; i < bytes.length; i += 2) {
+            byte[] pair = new byte[2];
+            pair[0] = bytes[i];
+            pair[1] = 0;
+            if (i + 1 < bytes.length) {
+                pair[1] = bytes[i + 1];
+            }
+            returnString.append(getHammingCode(getBitsFromBytes(pair)));
+        }
+        System.out.println("Return string: " + returnString);
+        return returnString.toString();
     }
 
     public static byte[] getBytesFromHammingCode(String bits) {
 
+        byte[] bytes = new byte[bits.length() / 21 * 2];
+
+        for (int i = 0; i < bits.length(); i += 21) {
+            byte[] pair = getBytesFromBits(
+                    inject(bits.substring(i, i + 21)));
+            bytes[i / 21 * 2] = pair[0];
+            bytes[i / 21 * 2 + 1] = pair[1];
+        }
+
+        return bytes;
     }
 
     private static String getBitsFromBytes(byte[] bytes) {
-
         StringBuilder bits = new StringBuilder(bytes.length * 8);
-
         int j = 0;
         for (byte byte_ : bytes) {
 
@@ -37,13 +57,11 @@ public class HammingCode {
             System.out.println("Bits: " + bits);
             throw new RuntimeException("Cannot get bites from bits! Bits are not divisible on 8.");
         }
-
         byte[] bytes = new byte[bits.length() / 8];
         int bytesPointer = 0;
+        for (int i = 0; i < bits.length(); i += 8) {
 
-        for (int i = 0; i < bits.length(); i+=8) {
-
-            String bit = bits.substring(i, i + 8);
+            String bit = bits.substring(i, i + 7);
             byte b = (byte) Integer.parseInt(bit, 2);
 
             bytes[bytesPointer] = b;
@@ -94,7 +112,6 @@ public class HammingCode {
                 }
             }
         }
-
 
         return binaryString.toString().replace("N", "");
     }
@@ -166,10 +183,13 @@ public class HammingCode {
 
     public static void main(String[] args) {
 
-        byte bytes[] = {34, 56};
-        System.out.println(Arrays.toString(bytes));
-        String bits = getHammingCode(getBitsFromBytes(bytes));
-        byte[] returnBytes =getBytesFromBits(inject(bits));
+        byte bytes[] = {34, 56, 78, 34};
+
+        String hammingCode = getHammingCodeFromBytes(bytes);
+        System.out.println(hammingCode);
+        byte[] returnBytes = getBytesFromHammingCode(hammingCode);
         System.out.println(Arrays.toString(returnBytes));
+
+
     }
 }
