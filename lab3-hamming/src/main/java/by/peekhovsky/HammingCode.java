@@ -1,5 +1,7 @@
 package by.peekhovsky;
 
+import org.apache.commons.lang.ArrayUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,16 +29,26 @@ public class HammingCode {
 
     public static byte[] getBytesFromHammingCode(String bits) {
 
-        byte[] bytes = new byte[bits.length() / 21 * 2];
+        ArrayList<Byte> bytes  = new ArrayList<>();
 
         for (int i = 0; i < bits.length(); i += 21) {
+
+            System.out.println("Bits: " + bits.substring(i, i + 21));
+
             byte[] pair = getBytesFromBits(
                     inject(bits.substring(i, i + 21)));
-            bytes[i / 21 * 2] = pair[0];
-            bytes[i / 21 * 2 + 1] = pair[1];
+
+            bytes.add(i / 21 * 2, pair[0]);
+            bytes.add(i / 21 * 2 + 1, pair[1]);
+
         }
 
-        return bytes;
+        bytes.trimToSize();
+        if (bytes.get(bytes.size() - 1) == 0) {
+            bytes.remove(bytes.size() - 1);
+        }
+        bytes.trimToSize();
+        return ArrayUtils.toPrimitive(bytes.toArray(new Byte[0]));
     }
 
     private static String getBitsFromBytes(byte[] bytes) {
@@ -61,7 +73,7 @@ public class HammingCode {
         int bytesPointer = 0;
         for (int i = 0; i < bits.length(); i += 8) {
 
-            String bit = bits.substring(i, i + 7);
+            String bit = bits.substring(i, i + 8);
             byte b = (byte) Integer.parseInt(bit, 2);
 
             bytes[bytesPointer] = b;
@@ -183,7 +195,7 @@ public class HammingCode {
 
     public static void main(String[] args) {
 
-        byte bytes[] = {34, 56, 78, 34};
+        byte bytes[] = {34, 56, 78, 34, 37};
 
         String hammingCode = getHammingCodeFromBytes(bytes);
         System.out.println(hammingCode);

@@ -172,7 +172,12 @@ class MessengerCore {
     void sendMessage(String s) {
         Runnable r = () -> {
             try {
-                serialPort.writeString(HammingCode.getHammingCodeFromBytes(ByteStuffing.doStuffing((s).getBytes())));
+                serialPort.writeString(
+                        HammingCode.getHammingCodeFromBytes(
+                                ByteStuffing.doStuffing((s).getBytes()
+                                )
+                        ) + "$end$"
+                );
 
             } catch (SerialPortException e) {
                 e.printStackTrace();
@@ -201,9 +206,10 @@ class MessengerCore {
         public void serialEvent(SerialPortEvent event) {
             if (event.isRXCHAR() && event.getEventValue() > 0) {
                 try {
-                    String s = new String(ByteStuffing.inject(HammingCode.getBytesFromHammingCode(serialPort.readString(event.getEventValue()))));
 
-                    messageCreator(s);
+                    messageCreator(
+                            serialPort.readString(event.getEventValue())
+                    );
                 }
                 catch (SerialPortException e) {
                     e.printStackTrace();
@@ -213,13 +219,19 @@ class MessengerCore {
         }
     }
 
-    private void messageCreator(String s) {
-        message.append(s);
-        //if (s.length() >= 5) {
-         //   if (message.substring(message.length() - 5, message.length()).equals("$end$")) {
-                Main.print("Message: " + message.substring(0, message.length() - 5));
+    private void messageCreator(String newString) {
+        message.append(newString);
+        if (newString.length() >= 5) {
+           if (message.substring(message.length() - 5, message.length()).equals("$end$")) {
+               String str = new String(
+                       ByteStuffing.inject(
+                               HammingCode.getBytesFromHammingCode(message.substring(0, message.length() - 5)))
+               );
+               Main.print("Message: " + str);
                message = new StringBuffer();
-        //    }
-        //}
+           }
+        }
+
+
     }
 }
