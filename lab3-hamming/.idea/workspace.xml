@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eea8406e-574b-4de0-b82d-9e4adb9abf3d" name="Default Changelist" comment="HammingCode">
-<<<<<<< HEAD
+      HEAD
       <change beforePath="$PROJECT_DIR$/../.gitattributes" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/description.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/libraries/jssc_2_8_0.xml" beforeDir="false" />
@@ -218,7 +218,7 @@
       </MavenImportingSettings>
     </option>
   </component>
-<<<<<<< HEAD
+HEAD
   <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-9" />
     <option name="y" value="-9" />
