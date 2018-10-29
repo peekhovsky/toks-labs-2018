@@ -1,10 +1,8 @@
-package by.peekhovsky;
+package by.peekhovsky.messenger.coding;
 
 import org.apache.commons.lang.ArrayUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 @SuppressWarnings("WeakerAccess")
@@ -187,21 +185,5 @@ public class HammingCode {
         }
 
         return binaryString.toString().replace("a", "");
-    }
-
-
-
-
-
-    public static void main(String[] args) {
-
-        byte bytes[] = {34, 56, 78, 34, 37};
-
-        String hammingCode = getHammingCodeFromBytes(bytes);
-        System.out.println(hammingCode);
-        byte[] returnBytes = getBytesFromHammingCode(hammingCode);
-        System.out.println(Arrays.toString(returnBytes));
-
-
     }
 }

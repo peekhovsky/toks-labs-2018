@@ -1,26 +1,28 @@
-package by.peekhovsky;
+package by.peekhovsky.messenger.messenger;
 
+import by.peekhovsky.messenger.app.Main;
+import by.peekhovsky.messenger.coding.ByteStuffing;
+import by.peekhovsky.messenger.coding.HammingCode;
 import jssc.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+public class MessengerCore {
 
-class MessengerCore {
+    public final static String[] SPEEDS = {"110", "300", "600", "1200", "4800",
+            "9600", "14400", "19200", "38400", "57600", "115200", "128000", "256000"};
 
     private SerialPort serialPort;
     private boolean isPortOpened = false;
     private StringBuffer message = new StringBuffer();
 
-    final static String[] speeds = { "110", "300", "600", "1200", "4800",
-            "9600", "14400","19200", "38400", "57600",  "115200", "128000", "256000" };
-
-    ArrayList<String> getPortNames() {
+    public List<String> getPortNames() {
         return new ArrayList<>(Arrays.asList(SerialPortList.getPortNames()));
     }
 
-    boolean connect(String portName, String speedName) {
+    public boolean connect(String portName, String speedName) {
         if (isPortOpened) {
             Main.print("Port is already opened!");
             return true;
@@ -28,7 +30,7 @@ class MessengerCore {
         serialPort = new SerialPort(portName);
 
         try {
-            Main.print("Trying to open port " +  serialPort.getPortName() + "...");
+            Main.print("Trying to open port " + serialPort.getPortName() + "...");
 
             //set params
             switch (speedName) {
@@ -150,7 +152,7 @@ class MessengerCore {
         return true;
     }
 
-    boolean stop() {
+    public boolean stop() {
         if (!isPortOpened) {
             Main.print("Port is already closed!");
             return true;
@@ -169,7 +171,7 @@ class MessengerCore {
         }
     }
 
-    void sendMessage(String s) {
+    public void sendMessage(String s) {
         Runnable r = () -> {
             try {
                 serialPort.writeString(
@@ -200,7 +202,6 @@ class MessengerCore {
     }
 
 
-
     private class PortReader implements SerialPortEventListener {
         @Override
         public void serialEvent(SerialPortEvent event) {
@@ -210,8 +211,7 @@ class MessengerCore {
                     messageCreator(
                             serialPort.readString(event.getEventValue())
                     );
-                }
-                catch (SerialPortException e) {
+                } catch (SerialPortException e) {
                     e.printStackTrace();
                     Main.print("Cannot read message: serialEvent(SerialPortEvent event)");
                 }
@@ -222,14 +222,19 @@ class MessengerCore {
     private void messageCreator(String newString) {
         message.append(newString);
         if (newString.length() >= 5) {
-           if (message.substring(message.length() - 5, message.length()).equals("$end$")) {
-               String str = new String(
-                       ByteStuffing.inject(
-                               HammingCode.getBytesFromHammingCode(message.substring(0, message.length() - 5)))
-               );
-               Main.print("Message: " + str);
-               message = new StringBuffer();
-           }
+            if (message.substring(message.length() - 5, message.length()).equals("$end$")) {
+                String str = new String(
+                        ByteStuffing.inject(
+                                HammingCode.getBytesFromHammingCode(message.substring(0, message.length() - 5)))
+                );
+
+                if (str == CollisionMaker.JAM_FLAG) {
+                    Main.print("Collision is");
+                } else {
+                    Main.print("Message: " + str);
+                }
+                message = new StringBuffer();
+            }
         }
 
 

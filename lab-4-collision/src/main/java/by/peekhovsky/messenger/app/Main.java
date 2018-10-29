@@ -1,14 +1,12 @@
-package by.peekhovsky;
+package by.peekhovsky.messenger.app;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import by.peekhovsky.messenger.messenger.MessengerCore;
+
+import java.util.*;
 
 public class Main  {
 
-    synchronized static void print(String s) {
+    public synchronized static void print(String s) {
         System.out.println(s);
     }
 
@@ -24,7 +22,7 @@ public class Main  {
 
         while (true) {
 
-            ArrayList<String> portNames = messengerCore.getPortNames();
+            List<String> portNames = messengerCore.getPortNames();
 
             if (portNames.isEmpty()) {
                 print("There is no ports in your computer.");
@@ -69,10 +67,10 @@ public class Main  {
                         break;
                     }
                     case 3: {
-                        print("Available bauds: " + Arrays.toString(MessengerCore.speeds));
+                        print("Available bauds: " + Arrays.toString(MessengerCore.SPEEDS));
                         print("Print a baud: ");
                         String s = scanner.next();
-                        if (Arrays.binarySearch(MessengerCore.speeds, s) != -1) {
+                        if (Arrays.binarySearch(MessengerCore.SPEEDS, s) != -1) {
                             baudName = s;
                             print("The baud has been changed.");
                         } else {

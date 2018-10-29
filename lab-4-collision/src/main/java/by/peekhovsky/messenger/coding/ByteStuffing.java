@@ -1,4 +1,4 @@
-package by.peekhovsky;
+package by.peekhovsky.messenger.coding;
 
 import org.apache.commons.lang.ArrayUtils;
 import java.util.ArrayList;
