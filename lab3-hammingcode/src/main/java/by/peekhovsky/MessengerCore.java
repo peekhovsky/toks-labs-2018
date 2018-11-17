@@ -1,14 +1,21 @@
+package by.peekhovsky;
 
 import jssc.*;
+import org.apache.commons.lang.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class MessengerCore {
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+class MessengerCore {
 
     private SerialPort serialPort;
     private boolean isPortOpened = false;
     private StringBuffer message = new StringBuffer();
+
+    volatile private List<Byte> arrivedBytes = new ArrayList<>();
 
     final static String[] speeds = { "110", "300", "600", "1200", "4800",
             "9600", "14400","19200", "38400", "57600",  "115200", "128000", "256000" };
@@ -88,9 +95,9 @@ public class MessengerCore {
                 case "38400":
                     serialPort.openPort();
                     serialPort.setParams(SerialPort.BAUDRATE_38400,
-                        SerialPort.DATABITS_8,
-                        SerialPort.STOPBITS_1,
-                        SerialPort.PARITY_NONE);
+                            SerialPort.DATABITS_8,
+                            SerialPort.STOPBITS_1,
+                            SerialPort.PARITY_NONE);
                     break;
                 case "57600":
                     serialPort.openPort();
@@ -102,9 +109,9 @@ public class MessengerCore {
                 case "115200":
                     serialPort.openPort();
                     serialPort.setParams(SerialPort.BAUDRATE_115200,
-                        SerialPort.DATABITS_8,
-                        SerialPort.STOPBITS_1,
-                        SerialPort.PARITY_NONE);
+                            SerialPort.DATABITS_8,
+                            SerialPort.STOPBITS_1,
+                            SerialPort.PARITY_NONE);
                     break;
                 case "128000":
                     serialPort.openPort();
@@ -152,7 +159,6 @@ public class MessengerCore {
             Main.print("Port is already closed!");
             return true;
         }
-
         try {
             Main.print("Trying to close port " + serialPort.getPortName() + "...");
             serialPort.closePort();
@@ -167,11 +173,15 @@ public class MessengerCore {
         }
     }
 
-    boolean sendMessage(String s) {
+    void sendMessage(String s, Integer mistakePosition) {
         Runnable r = () -> {
             try {
-                serialPort.writeString(s);
-                serialPort.writeString("$end$");
+                serialPort.writeBytes(
+                        ByteStuffing.doStuffing(
+                                (HammingCode.getHammingCodeFromBytes(s.getBytes(), mistakePosition) + "$end$")
+                                .getBytes())
+                );
+
             } catch (SerialPortException e) {
                 e.printStackTrace();
                 Main.print("Cannot send message: " + e.getExceptionType());
@@ -186,13 +196,10 @@ public class MessengerCore {
             } else {
                 Main.print("Error: cannot connect to other device!");
                 thd.interrupt();
-                return false;
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
 
@@ -202,7 +209,7 @@ public class MessengerCore {
         public void serialEvent(SerialPortEvent event) {
             if (event.isRXCHAR() && event.getEventValue() > 0) {
                 try {
-                    String s = serialPort.readString(event.getEventValue());
+                    String s = new String(ByteStuffing.inject(serialPort.readBytes(event.getEventValue())), UTF_8);
                     messageCreator(s);
                 }
                 catch (SerialPortException e) {
@@ -213,12 +220,18 @@ public class MessengerCore {
         }
     }
 
-    private void messageCreator(String s) {
-        message.append(s);
-        if (message.substring(message.length() - 5, message.length()).equals("$end$")) {
-            Main.print("Message: " +message.substring(0,message.length() - 5));
-            message = new StringBuffer();
+    private void messageCreator(String newString) {
+        message.append(newString);
+        if (newString.length() >= 5) {
+           if (message.substring(message.length() - 5, message.length()).equals("$end$")) {
+               String str = new String(
+                       HammingCode.getBytesFromHammingCode(message.substring(0, message.length() - 5))
+               );
+               Main.print("Message: " + str);
+               message = new StringBuffer();
+           }
         }
+
 
     }
 }

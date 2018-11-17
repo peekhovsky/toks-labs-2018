@@ -1,3 +1,6 @@
+package by.peekhovsky;
+
+import by.peekhovsky.ByteStuffing;
 import org.junit.Test;
 
 import java.util.Arrays;

@@ -1,3 +1,6 @@
+package by.peekhovsky;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
@@ -11,6 +14,7 @@ public class Main  {
 
     public static void main(String[] args) {
 
+        boolean portIsOpened = false;
         Scanner scanner = new Scanner(System.in);
 
         MessengerCore messengerCore = new MessengerCore();
@@ -29,8 +33,9 @@ public class Main  {
                 portName = portNames.get(0);
             }
 
-            boolean portIsOpened = false;
+
             while (!portIsOpened) {
+
                 print("1 - Connect, 2 - Change port, 3 - Change baud, 0 - Exit");
                 print("Port: " + portName);
                 print("Baud: " + baudName);
@@ -83,7 +88,7 @@ public class Main  {
 
 
             while (portIsOpened) {
-                print("1 - Print message, 2 - Close port, 0 - Exit");
+                print("1 - Print message, 2 - Close port, 3 - Send a message with mistake, 0 - Exit");
                 int t;
                 try {
                     t = scanner.nextInt();
@@ -93,20 +98,30 @@ public class Main  {
                     continue;
                 }
                 switch (t) {
-                    case 1:
-
+                    case 1: {
                         scanner.reset();
                         print("Print a message: ");
 
                         String m = scanner.next();
-
-                        messengerCore.sendMessage(m);
-
+                        messengerCore.sendMessage(m, -1);
                         break;
-
-                    case 2:
+                    }
+                    case 2: {
                         portIsOpened = false;
+                        messengerCore.stop();
                         break;
+                    }
+                    case 3: {
+                        scanner.reset();
+                        print("Print a message: ");
+                        String m = scanner.next();
+
+                        print("Set a position of mistake: ");
+                        Integer pos = scanner.nextInt();
+                        messengerCore.sendMessage(m, pos);
+
+                        break;
+                    }
                     case 0:
                         portIsOpened = false;
                         if (messengerCore.stop()) {
@@ -116,9 +131,7 @@ public class Main  {
                     default: {
                         print("Wrong input!");
                     }
-
                 }
-
             }
         }
     }

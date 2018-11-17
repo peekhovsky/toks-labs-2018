@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="lab3-hammingcode:jar">
+    <output-path>$PROJECT_DIR$/../../lab3_hammingcode_jar</output-path>
+    <root id="archive" name="lab3-hammingcode.jar">
+      <element id="module-output" name="lab3-hammingcode" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/16.0.3/annotations-16.0.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-lang/commons-lang/2.6/commons-lang-2.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/scream3r/jssc/2.8.0/jssc-2.8.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
