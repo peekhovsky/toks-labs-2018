@@ -21,7 +21,7 @@ public class HammingCode {
             }
             returnString.append(getHammingCode(getBitsFromBytes(pair)));
         }
-        System.out.println("Return string: " + returnString);
+       // System.out.println("Return string: " + returnString);
         return returnString.toString();
     }
 
@@ -31,7 +31,7 @@ public class HammingCode {
 
         for (int i = 0; i < bits.length(); i += 21) {
 
-            System.out.println("Bits: " + bits.substring(i, i + 21));
+           // System.out.println("Bits: " + bits.substring(i, i + 21));
 
             byte[] pair = getBytesFromBits(
                     inject(bits.substring(i, i + 21)));

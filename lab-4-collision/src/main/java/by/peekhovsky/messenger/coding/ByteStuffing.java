@@ -7,13 +7,11 @@ import java.util.Arrays;
 
 @SuppressWarnings("WeakerAccess")
 public class ByteStuffing {
-
     //first and last bytes are
     public final static byte F_END_SYMBOL = 0x7E; //126 ~
     public final static byte F_ESC_SYMBOL = 0x7D; //125 }
     public final static byte T_END_SYMBOL = 0x5E; //94
     public final static byte T_ESC_SYMBOL = 0x5D; //93
-
 
     public static byte[] doStuffing(byte[] bytes) {
 
@@ -27,12 +25,10 @@ public class ByteStuffing {
             list.trimToSize();
             if (list.get(i) == F_ESC_SYMBOL) {
                 list.add(i+1, T_ESC_SYMBOL);
-                //i++;
             }
             else if (list.get(i) == F_END_SYMBOL) {
                 list.set(i, F_ESC_SYMBOL);
                 list.add(i+1, T_END_SYMBOL);
-                //i++;
             }
         }
 

@@ -222,21 +222,20 @@ public class MessengerCore {
     private void messageCreator(String newString) {
         message.append(newString);
         if (newString.length() >= 5) {
-            if (message.substring(message.length() - 5, message.length()).equals("$end$")) {
-                String str = new String(
-                        ByteStuffing.inject(
-                                HammingCode.getBytesFromHammingCode(message.substring(0, message.length() - 5)))
-                );
 
-                if (str == CollisionMaker.JAM_FLAG) {
-                    Main.print("Collision is");
+            if (message.substring(message.length() - 5, message.length()).equals("$end$")) {
+                    String str = new String(
+                            ByteStuffing.inject(
+                                    HammingCode.getBytesFromHammingCode(message.substring(0, message.length() - 5)))
+                    );
+                if ((str.length() > 15) && str.substring(0, 16).equals(CollisionMaker.JAM_FLAG)) {
+                    Main.print("Collision is detected!");
                 } else {
                     Main.print("Message: " + str);
                 }
                 message = new StringBuffer();
+
             }
         }
-
-
     }
 }

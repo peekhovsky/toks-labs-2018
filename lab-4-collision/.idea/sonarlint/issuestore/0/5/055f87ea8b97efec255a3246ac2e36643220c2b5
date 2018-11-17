@@ -1,0 +1,15 @@
+
+Usquid:S1197•"8Move the array designator from the variable to the type.(Ô‰´áüÿÿÿÿ
+Tsquid:S1197i"8Move the array designator from the variable to the type.(Ô‰´áüÿÿÿÿ
+nsquid:CommentedOutCodeLine""<This block of commented-out lines of code should be removed.( ±ÿÎûÿÿÿÿ8¥üÑúë,
+isquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(£ýáê8¡Ì•úë,
+U
+squid:S106¯"9Replace this use of System.out or System.err by a logger.(ñ¼Ú¶ùÿÿÿÿ
+Vsquid:S1118	":Add a private constructor to hide the implicit public one.(Öý‡“ûÿÿÿÿ
+^squid:S00112D"FDefine and throw a dedicated exception instead of using a generic one.(àííÕ
+osquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(–Ìß·þÿÿÿÿ
+P
+squid:S106©"9Replace this use of System.out or System.err by a logger.(‚¯¤
+nsquid:S3776U"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(Ò¼ë¨ýÿÿÿÿ
+T
+squid:S106C"9Replace this use of System.out or System.err by a logger.(ßáèüúÿÿÿÿ

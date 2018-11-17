@@ -1,5 +1,6 @@
 package by.peekhovsky.messenger.app;
 
+import by.peekhovsky.messenger.messenger.CollisionMaker;
 import by.peekhovsky.messenger.messenger.MessengerCore;
 
 import java.util.*;
@@ -16,7 +17,7 @@ public class Main  {
         Scanner scanner = new Scanner(System.in);
 
         MessengerCore messengerCore = new MessengerCore();
-
+        CollisionMaker collisionMaker = new CollisionMaker(messengerCore);
         String baudName = "9600";
         String portName;
 
@@ -97,12 +98,11 @@ public class Main  {
                 }
                 switch (t) {
                     case 1:
-
                         scanner.reset();
                         print("Print a message: ");
 
                         String m = scanner.next();
-                        messengerCore.sendMessage(m);
+                        collisionMaker.sendMessage(m);
                         break;
 
                     case 2:

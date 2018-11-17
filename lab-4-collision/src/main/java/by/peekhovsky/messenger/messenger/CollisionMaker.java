@@ -8,8 +8,10 @@ import java.util.Random;
 public class CollisionMaker {
 
     private Random random;
+    MessengerCore messengerCore;
 
-    CollisionMaker() {
+    public CollisionMaker(MessengerCore messengerCore) {
+        this.messengerCore = messengerCore;
         random = new Random();
     }
 
@@ -18,40 +20,46 @@ public class CollisionMaker {
     public static final int MESSAGE_HAS_BEEN_SENT = 2;
     public static final String JAM_FLAG = "$$$$$$$$$$$$$$$$";
 
-    int tryCount = 0;
-
     private boolean isChannelEmpty() {
-        return random.nextInt() % 5 == 0;
+        return random.nextInt() % 5 != 0;
     }
 
     private boolean isCollisionDetected() {
-        return !(random.nextInt() % 3 == 0);
+        return random.nextInt() % 3 != 0;
     }
 
-    public void sendMessage(MessengerCore messengerCore, String mes) throws InterruptedException {
+    public void sendMessage(String mes) {
+
+        int pauseTime = 1;
+
         int tryCount = 0;
-        int pauseTime = 0;
 
         while (true) {
-
-            if ((tryCount > 0) && (tryCount <= 10)) {
-                Main.print("Trying again...");
-                tryCount++;
-            }
-            else if (tryCount > 10) {
+            if (tryCount > 10) {
                 Main.print("Cannot solve messenger.");
                 break;
             }
+            if (tryCount > 0) {
+                Main.print("Trying again...");
+            }
+            if (tryCount >= 0) {
+                tryCount++;
+            }
 
-            int flag = send(messengerCore, mes, pauseTime);
+            int flag;
+            if (tryCount == 0) {
+                flag = send(mes, pauseTime, isChannelEmpty());
+            } else {
+                flag = send(mes, pauseTime, true);
+            }
 
             if (flag == CHANNEL_IS_BUSY_FLAG) {
                 Main.print("Cannot send message, port is busy!");
             }
             else if (flag == COLLISION_IS_DETECTED_FLAG) {
                 Main.print("Collision is detected. Trying to solve...");
-                pauseTime = random.nextInt() % 1000;
-                send(messengerCore, JAM_FLAG, 0);
+                pauseTime = Math.abs(random.nextInt() % 1000 + 1);
+                Main.print("Pause time: " + pauseTime);
             }
             else if (flag == MESSAGE_HAS_BEEN_SENT) {
                 break;
@@ -59,17 +67,24 @@ public class CollisionMaker {
         }
     }
 
-    private int send(MessengerCore messengerCore, String mes, int pauseTime) throws InterruptedException {
+    private int send(String mes, int pauseTime, boolean isChannelEmpty){
 
         while (true) {
-            if (!isChannelEmpty()) {
+            if (!isChannelEmpty) {
                 return CHANNEL_IS_BUSY_FLAG;
             }
-            Thread.sleep(pauseTime);
-            messengerCore.sendMessage(mes);
+            try {
+                Thread.sleep(pauseTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             if (isCollisionDetected()) {
+                messengerCore.sendMessage(JAM_FLAG + mes);
                 return COLLISION_IS_DETECTED_FLAG;
+            } else {
+                messengerCore.sendMessage(mes);
+                return MESSAGE_HAS_BEEN_SENT;
             }
         }
     }
