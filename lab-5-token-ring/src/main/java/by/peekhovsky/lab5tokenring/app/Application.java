@@ -65,13 +65,17 @@ public class Application {
 
     private Optional<Integer> changeBaud() {
         Integer baud = null;
-        print("Available bauds: " + Arrays.toString(MessengerManager.SPEEDS));
-        print("Print a baud: ");
-        String s = scanner.next();
-        if (Arrays.binarySearch(MessengerManager.SPEEDS, s) != -1) {
-            baud = Integer.parseInt(s);
-            print("The baud has been changed.");
-        } else {
+        try {
+            print("Available bauds: " + Arrays.toString(MessengerManager.SPEEDS));
+            print("Print a baud: ");
+            String s = scanner.next();
+            if (Arrays.binarySearch(MessengerManager.SPEEDS, s) != -1) {
+                baud = Integer.parseInt(s);
+                print("The baud has been changed.");
+            } else {
+                print("Wrong name of a baud!");
+            }
+        } catch (NumberFormatException e) {
             print("Wrong name of a baud!");
         }
         return Optional.ofNullable(baud);
@@ -152,7 +156,7 @@ public class Application {
 
     private void executeMessengerMenu() {
         while (isPortOpened) {
-            System.out.println("1 - Print message, 2 - Close port, 0 - Exit");
+            System.out.println("1 - Print message, 2 - Close port, 3 - Send Empty Token, 0 - Exit");
             int t;
             try {
                 t = scanner.nextInt();
@@ -167,13 +171,17 @@ public class Application {
                     String addressTag = scanner.next();
                     scanner.reset();
                     LOGGER.info("Print a message: ");
-                    String m = scanner.next();
+                    scanner = new Scanner(System.in);
+                    String m = scanner.nextLine();
                     tokenRingManager.sendMessage(addressTag, m);
                     break;
 
                 case 2:
                     isPortOpened = false;
                     messengerManager.stop();
+                    break;
+                case 3:
+                    tokenRingManager.sendEmptyToken();
                     break;
                 case 0:
                     isPortOpened = false;

@@ -174,6 +174,40 @@ public class TokenRingManager {
         return portOptional;
     }
 
+    public void sendEmptyToken() {
+        send(" ");
+    }
+
+    private void send(final String message) {
+        Runnable r = () -> {
+            try {
+                portOutput.writeString(
+                        HammingCode.getHammingCodeFromBytes(
+                                ByteStuffing.doStuffing((message).getBytes()
+                                )
+                        ) + "$end$"
+                );
+
+            } catch (SerialPortException e) {
+                LOGGER.error("Cannot send message: " + e.getExceptionType());
+            }
+        };
+        Thread thd = new Thread(r);
+        thd.start();
+        try {
+            thd.join(2000);
+            if (!thd.isAlive()) {
+                LOGGER.trace("Message has been sent.");
+            } else {
+                LOGGER.error("Error: cannot connect device!");
+                LOGGER.error("Port: " + portOutput.getPortName());
+                thd.interrupt();
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            LOGGER.debug("Interrupted!");
+        }
+    }
     /***
      * Event listener class. Listens messages from input port.
      */
@@ -207,6 +241,7 @@ public class TokenRingManager {
          */
         private void messageCreator(String newString) {
             message.append(newString);
+            LOGGER.trace("Message draft: " + newString);
             if (newString.length() >= 5
                     && message.substring(message.length() - 5, message.length())
                     .equals("$end$")) {
@@ -248,36 +283,7 @@ public class TokenRingManager {
             LOGGER.info(message);
         }
 
-        private void send(final String message) {
-            Runnable r = () -> {
-                try {
-                    portOutput.writeString(
-                            HammingCode.getHammingCodeFromBytes(
-                                    ByteStuffing.doStuffing((message).getBytes()
-                                    )
-                            ) + "$end$"
-                    );
 
-                } catch (SerialPortException e) {
-                    LOGGER.error("Cannot send message: " + e.getExceptionType());
-                }
-            };
-            Thread thd = new Thread(r);
-            thd.start();
-            try {
-                thd.join(2000);
-                if (!thd.isAlive()) {
-                    LOGGER.info("Message has been sent.");
-                } else {
-                    LOGGER.error("Error: cannot connect device!");
-                    LOGGER.error("Port: " + portOutput.getPortName());
-                    thd.interrupt();
-                }
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                LOGGER.debug("Interrupted!");
-            }
-        }
     }
 
 }

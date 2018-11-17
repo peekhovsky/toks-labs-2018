@@ -71,7 +71,7 @@ public final class TokenParser {
                 token.setAddressTag("undefined");
             }
 
-            token.setMessage(scanner.next());
+            token.setMessage(scanner.nextLine());
             tokenOptional = Optional.of(token);
 
         } catch (NoSuchElementException e) {
