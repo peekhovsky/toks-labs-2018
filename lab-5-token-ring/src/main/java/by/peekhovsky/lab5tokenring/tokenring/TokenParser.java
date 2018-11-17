@@ -70,7 +70,7 @@ public final class TokenParser {
             } else {
                 token.setAddressTag("undefined");
             }
-
+    
             token.setMessage(scanner.nextLine());
             tokenOptional = Optional.of(token);
 
