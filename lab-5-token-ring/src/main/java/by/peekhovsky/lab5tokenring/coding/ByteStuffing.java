@@ -1,6 +1,7 @@
 package by.peekhovsky.lab5tokenring.coding;
 
 import org.apache.commons.lang.ArrayUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 

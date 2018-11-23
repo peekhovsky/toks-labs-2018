@@ -12,11 +12,14 @@ import java.util.regex.Pattern;
  *
  * @author Rostislav Pekhovsky
  * @version 0.1
- * @link http://github.com/peekhovsky/
  * @see Token
  */
 public final class TokenParser {
 
+    /***
+     * @param data data to parse
+     * @return parsed list of tokens
+     */
     public static List<Token> parse(@NonNull final String data) {
         List<Token> tokens = new ArrayList<>();
         try (Scanner scanner = new Scanner(data)) {
@@ -28,6 +31,10 @@ public final class TokenParser {
         return tokens;
     }
 
+    /***
+     * @param tokens tokens to serialize
+     * @return serialized token string
+     */
     public static String serialize(@NonNull final List<Token> tokens) {
         StringBuilder builder = new StringBuilder();
         for (Token token : tokens) {
@@ -42,8 +49,8 @@ public final class TokenParser {
         }
         return builder.toString();
     }
+
     /**
-     *
      * @param line string with data to make token object
      * @return optional of token
      */
@@ -65,12 +72,12 @@ public final class TokenParser {
             String returnAddressTagTemp = scanner.next(patternReturnAddress);
             if (returnAddressTagTemp.length() > 2) {
                 token.setReturnAddressTag(
-                      returnAddressTagTemp
+                        returnAddressTagTemp
                                 .replace("#from#", ""));
             } else {
                 token.setAddressTag("undefined");
             }
-    
+
             token.setMessage(scanner.nextLine());
             tokenOptional = Optional.of(token);
 
@@ -80,6 +87,9 @@ public final class TokenParser {
         return tokenOptional;
     }
 
+    /***
+     * Private no args constructor.
+     */
     private TokenParser() {
     }
 

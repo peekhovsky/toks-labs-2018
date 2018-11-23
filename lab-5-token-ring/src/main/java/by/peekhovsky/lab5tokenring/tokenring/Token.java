@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
  *
  * @author Rostislav Pekhovsky
  * @version 0.1
- * @link http://github.com/peekhovsky/
  */
 @Data
 @NoArgsConstructor

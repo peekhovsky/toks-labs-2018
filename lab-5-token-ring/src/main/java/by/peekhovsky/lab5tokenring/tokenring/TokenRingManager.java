@@ -2,14 +2,10 @@ package by.peekhovsky.lab5tokenring.tokenring;
 
 import by.peekhovsky.lab5tokenring.coding.ByteStuffing;
 import by.peekhovsky.lab5tokenring.coding.HammingCode;
-import by.peekhovsky.lab5tokenring.messenger.MessengerManager;
-import com.sun.org.apache.bcel.internal.generic.LOOKUPSWITCH;
 import jssc.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.swing.*;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,7 +19,7 @@ public class TokenRingManager {
      * Logger.
      */
     private static final Logger LOGGER
-            = LogManager.getLogger(MessengerManager.class);
+            = LogManager.getLogger(TokenRingManager.class);
 
     /**
      * Available connection speeds.
@@ -50,7 +46,7 @@ public class TokenRingManager {
 
     /**
      * Future tokens.
-     * */
+     */
     private List<Token> futureTokens = new ArrayList<>();
 
     /**
@@ -208,6 +204,28 @@ public class TokenRingManager {
             LOGGER.debug("Interrupted!");
         }
     }
+
+    /***
+     * Closes all ports.
+     **/
+    public void stop() {
+
+        LOGGER.info("Trying to close port "
+                + portInput.getPortName() + "...");
+        LOGGER.info("Trying to close port "
+                + portOutput.getPortName() + "...");
+        try {
+            portInput.closePort();
+            portOutput.closePort();
+        } catch (SerialPortException e) {
+            LOGGER.error("Cannot close port: "
+                    + e.getPortName());
+            LOGGER.error("Message: " + e.getMessage());
+            LOGGER.error("Error: " + e.getExceptionType());
+        }
+        LOGGER.info("Ports has been closed.");
+    }
+
     /***
      * Event listener class. Listens messages from input port.
      */
@@ -257,6 +275,7 @@ public class TokenRingManager {
                 message = new StringBuilder();
             }
         }
+
         private void processToken(final List<Token> tokens) {
             List<Token> deviceTokens = tokens.stream()
                     .filter(token -> token.getAddressTag().equals(deviceTag))
